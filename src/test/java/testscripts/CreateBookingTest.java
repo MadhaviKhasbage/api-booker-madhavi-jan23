@@ -60,6 +60,8 @@ public class CreateBookingTest {
 		Assert.assertEquals(res.getStatusCode(), Status_Code.OK);
 		//Assert.assertEquals(Integer.valueOf(res.jsonPath().getInt(("bookingid")) instanceof Integer);
 		
+		System.out.println(bookingId);
+		
 		Assert.assertTrue(bookingId>0);
 		validateResponse(res,payload,"booking.");
 		
@@ -160,12 +162,16 @@ public class CreateBookingTest {
 		Response res = RestAssured.given()
 				.headers("Content-Type", "application/json")						
 				.headers("Cookie", "token=" + token)
-				.log().all()
-				.body(payload)
+				.log().all()				
 				.when()
 				.delete("/booking/" + bookingId);
 		Assert.assertEquals(res.getStatusCode(), Status_Code.CREATED);
-		System.out.println(res.asPrettyString());	
+				
+		Response resGet = RestAssured.given()
+				.headers("Accept", "application/json")
+				.when()
+				.get("/booking/"+bookingId);
+		Assert.assertEquals(resGet.getStatusCode(), 404);
 	}
 	
 	@Test(enabled=false)
